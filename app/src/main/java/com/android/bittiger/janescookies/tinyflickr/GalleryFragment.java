@@ -59,7 +59,7 @@ import java.util.List;
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment" ;
 
-    private static final int COLUMN_NUM = 3;
+    private static final int COLUMN_NUM = 2;
     private static final int ITEM_PER_PAGE = 100;
 
     private RequestQueue mRq;
