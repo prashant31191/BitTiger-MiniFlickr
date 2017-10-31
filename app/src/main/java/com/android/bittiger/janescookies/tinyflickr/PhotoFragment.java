@@ -2,9 +2,11 @@ package com.android.bittiger.janescookies.tinyflickr;
 
 
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,12 @@ import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.net.URL;
+
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 
 /**
@@ -75,7 +83,8 @@ public class PhotoFragment extends Fragment {
         downloadView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadPhoto();
+                //downloadPhoto();
+                downloadPhoto2();
                 Toast.makeText(getActivity(), "Start downloading", Toast.LENGTH_LONG).show();
             }
         });
@@ -103,6 +112,29 @@ public class PhotoFragment extends Fragment {
         mDownloadManager.enqueue(request);
     }
 
+    private void downloadPhoto2() {
+        try {
+            String folderName = "azwallpaper";
+
+            String url = mItem.getUrl();
+            URL urlObj = new URL(url);
+            String urlPath = urlObj.getPath();
+            String fileName = urlPath.substring(urlPath.lastIndexOf('/') + 1);
+// fileName is now "somefilename.xy"
+
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mItem.getUrl()));
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setTitle("Download...");
+            request.setDescription(mItem.getUrl());
+            request.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS,File.separator + folderName + File.separator + fileName);
+            mDownloadManager.enqueue(request);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
     // function for opening Flickr official app when open button is pressed
     private void openApp () {
         String url = UrlManager.getInstance().getFlickrUrl(mItem.getId());
@@ -143,6 +175,29 @@ public class PhotoFragment extends Fragment {
 
         request.setTag(TAG);
         mRq.add(request);
+    }
+
+    public void file_download(String uRl) {
+        String strFolderName = "azWallpapers";
+        File direct = new File(Environment.getExternalStorageDirectory()+ "/"+strFolderName);
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+        }
+
+        DownloadManager mgr = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+
+        Uri downloadUri = Uri.parse(uRl);
+        DownloadManager.Request request = new DownloadManager.Request(
+                downloadUri);
+
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI| DownloadManager.Request.NETWORK_MOBILE)
+                .setAllowedOverRoaming(false).setTitle("Demo")
+                .setDescription("Something useful. No, really.")
+                .setDestinationInExternalPublicDir("/"+strFolderName, "test.jpg");
+
+        mgr.enqueue(request);
+
     }
 
     // cancel downloading request when fragment is stopped
