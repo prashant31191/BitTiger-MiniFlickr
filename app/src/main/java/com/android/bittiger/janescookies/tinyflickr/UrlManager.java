@@ -1,6 +1,7 @@
 package com.android.bittiger.janescookies.tinyflickr;
 
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by xicheng on 16/7/8.
@@ -27,6 +28,8 @@ public class UrlManager {
     private static final String ENDPOINT = "https://api.flickr.com/services/rest/" ;
     private static final String METHOD_GETRECENT = "flickr.photos.getRecent" ;
     private static final String METHOD_SEARCH = "flickr.photos.search" ;
+    private static final String METHOD_SIZE = "flickr.photos.getSizes" ;
+
     private static final String PARAM_EXTRAS = "extras" ;
     private static final String PARAM_TEXT = "query" ;
     private static final String PAGE = "page";
@@ -72,6 +75,24 @@ public class UrlManager {
                     .appendQueryParameter("page", String.valueOf(page))
                     .build().toString();
         }
+        Log.i("==URL==","-Url-"+url);
+        return url;
+    }
+
+    public static String getItemUrlGetSize(String query, String photo_id) {
+        String url;
+      {
+           // - https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=b8cbad529685c20682f8c6d88ad200fd&photo_id=34691100885&format=json
+
+            url = Uri.parse(ENDPOINT).buildUpon()
+                    .appendQueryParameter("method", METHOD_SIZE)
+                    .appendQueryParameter("api_key", API_KEY)
+                    .appendQueryParameter("format", "json")
+                    //.appendQueryParameter("nojsoncallback", "1")
+                    .appendQueryParameter("photo_id", photo_id)
+                    .build().toString();
+        }
+        Log.i("==URL==","-Url-"+url);
         return url;
     }
 

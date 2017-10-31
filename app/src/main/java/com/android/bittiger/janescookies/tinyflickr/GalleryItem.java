@@ -13,16 +13,22 @@ public class GalleryItem implements Serializable  {
     private String secret;
     private String server;
     private String farm;
+    private String title;
 
-    public GalleryItem(String id, String secret, String server, String farm) {
+    public GalleryItem(String id, String secret, String server, String farm, String title) {
         this.id = id;
         this.secret = secret;
         this.server = server;
         this.farm = farm;
+        this.title = title;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getUrl() {

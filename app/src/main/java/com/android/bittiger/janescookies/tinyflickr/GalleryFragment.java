@@ -203,7 +203,8 @@ public class GalleryFragment extends Fragment {
                                 itemObj.getString("id"),
                                 itemObj.getString("secret"),
                                 itemObj.getString("server"),
-                                itemObj.getString("farm")
+                                itemObj.getString("farm"),
+                                itemObj.getString("title")
                         );
 
                         result.add(item);
