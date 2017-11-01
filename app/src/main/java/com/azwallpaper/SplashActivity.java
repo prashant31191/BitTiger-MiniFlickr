@@ -6,11 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.azwallpaper.R;
+public class SplashActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = SplashActivity.class.getSimpleName();
     private static final int KEEP_TIME = 2000;
     private Handler handler;
 
@@ -22,17 +20,17 @@ public class MainActivity extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         //this.getSupportActionBar().hide();
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
         handler = new Handler();
 
 
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(MainActivity.this,  GalleryActivity.class);
-
                 Log.d(TAG, "----------startActivityIntent----------");
+                Intent intent = new Intent(SplashActivity.this,  DashboardActivity.class);
                 startActivity(intent);
+                finish();
             }
         }, KEEP_TIME);
     }

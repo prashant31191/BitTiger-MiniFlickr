@@ -10,4 +10,10 @@
     <string name="view">View Full</string>
     <string name="open_in_app">Open in App</string>
     <string name="settings_description">this is description</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

@@ -104,7 +104,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                                             if (palette.getVibrantSwatch() != null) {
                                                 Palette.Swatch textSwatch = palette.getVibrantSwatch();
                                                 if (textSwatch == null) {
-//                                                Toast.makeText(MainActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(SplashActivity.this, "Null swatch :(", Toast.LENGTH_SHORT).show();
                                                     return;
                                                 }
                                                 holder.tvTitle.setBackgroundColor(textSwatch.getRgb());

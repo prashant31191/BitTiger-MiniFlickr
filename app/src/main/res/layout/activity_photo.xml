@@ -5,5 +5,5 @@
     android:id="@+id/fragmentContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.azwallpaper.com.azwallpaper.PhotoActivity">
+    tools:context="com.azwallpaper.PhotoActivity">
 </FrameLayout>
