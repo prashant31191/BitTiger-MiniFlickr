@@ -4,12 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.azwallpaper.SplashActivity"
-    android:background="@drawable/screen">
-
-    <!--
+    android:background="@color/colorPrimary"
+    >
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:src="@drawable/bg_image"
+    android:scaleType="centerCrop"
+    android:alpha="0.8"
+    />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" /-->
+        android:text="@string/app_name"
+        android:textSize="28dp"
+        android:textColor="#a111"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="14dp"/>
 </RelativeLayout>

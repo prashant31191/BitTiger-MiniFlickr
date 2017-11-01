@@ -68,6 +68,7 @@
 
         <activity
             android:name=".GalleryActivity"
+            android:launchMode="singleTop"
             android:parentActivityName=".DashboardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
