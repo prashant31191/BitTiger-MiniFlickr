@@ -1,4 +1,4 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
 
 import android.app.DownloadManager;
@@ -25,9 +25,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.api.UrlManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.utils.TouchImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;

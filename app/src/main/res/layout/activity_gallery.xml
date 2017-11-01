@@ -4,12 +4,12 @@
     xmlns:tools = "http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.bittiger.janescookies.tinyflickr.GalleryActivity">
+    tools:context="com.azwallpaper.com.azwallpaper.GalleryActivity">
 
 
     <fragment
         android:id="@+id/gallery_fragment"
-        android:name="com.android.bittiger.janescookies.tinyflickr.GalleryFragment"
+        android:name="com.azwallpaper.GalleryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

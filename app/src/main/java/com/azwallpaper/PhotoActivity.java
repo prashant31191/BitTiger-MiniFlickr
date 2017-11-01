@@ -1,9 +1,11 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+
+import com.azwallpaper.R;
 
 public class PhotoActivity extends AppCompatActivity {
     public static final String TAG = PhotoFragment.class.getSimpleName();

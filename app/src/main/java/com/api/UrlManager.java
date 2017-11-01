@@ -1,10 +1,10 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.api;
 
 import android.net.Uri;
 import android.util.Log;
 
 /**
- * Created by xicheng on 16/7/8.
+
  */
 public class UrlManager {
     private static final String TAG = UrlManager.class.getSimpleName();

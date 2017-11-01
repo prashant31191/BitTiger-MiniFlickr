@@ -1,8 +1,6 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
-import android.app.Activity;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,9 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.api.UrlManager;
+
 
 /**
- * Created by xicheng on 16/6/13.
+
  */
 public class GalleryActivity extends AppCompatActivity {
     private static final String TAG = GalleryActivity.class.getSimpleName();

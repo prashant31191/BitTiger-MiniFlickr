@@ -1,4 +1,4 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

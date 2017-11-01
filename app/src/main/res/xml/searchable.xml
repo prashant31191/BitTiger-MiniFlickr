@@ -8,7 +8,7 @@
     android:searchSettingsDescription="@string/settings_description"
 
     android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
-    android:searchSuggestAuthority="com.android.bittiger.janescookies.tinyflickr.SuggestionProvider"
+    android:searchSuggestAuthority="com.azwallpaper.SuggestionProvider"
     android:searchSuggestSelection=" ?">
 
 </searchable>

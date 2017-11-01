@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.bittiger.janescookies.tinyflickr.MainActivity"
+    tools:context="com.azwallpaper.com.azwallpaper.MainActivity"
     android:background="@drawable/screen">
 
     <!--

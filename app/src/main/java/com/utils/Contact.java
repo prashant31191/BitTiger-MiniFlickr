@@ -1,4 +1,4 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.utils;
 
 import android.util.Log;
 import android.widget.ImageView;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by xicheng on 16/6/19.
+
  */
 public class Contact {
 

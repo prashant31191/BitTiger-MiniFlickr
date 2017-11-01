@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/black"
-                tools:context="com.android.bittiger.janescookies.tinyflickr.PhotoFragment">
+                tools:context="com.azwallpaper.com.azwallpaper.PhotoFragment">
 
     <RelativeLayout
         android:visibility="visible"
@@ -146,7 +146,7 @@
         android:background="@color/white"
         >
 
-        <com.android.bittiger.janescookies.tinyflickr.TouchImageView
+        <com.utils.TouchImageView
             android:id="@+id/ivFullScreen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

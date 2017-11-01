@@ -1,4 +1,4 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.api;
 
 import android.net.Uri;
 
@@ -9,7 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by xicheng on 16/6/27.
+
  */
 public class FlickrFetchr {
 

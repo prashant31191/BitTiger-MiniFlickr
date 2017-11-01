@@ -1,7 +1,7 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.utils;
 
 /**
- * Created by prashant.patel on 10/31/2017.
+
  */
 
 import android.annotation.SuppressLint;

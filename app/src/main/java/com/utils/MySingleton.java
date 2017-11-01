@@ -1,4 +1,4 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.util.LruCache;
 
 /**
- * Created by xicheng on 16/6/26.
+
  */
 public class MySingleton {
     private static MySingleton mInstance;

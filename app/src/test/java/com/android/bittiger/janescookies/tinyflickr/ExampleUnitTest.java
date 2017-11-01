@@ -1,4 +1,4 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
 import org.junit.Test;
 

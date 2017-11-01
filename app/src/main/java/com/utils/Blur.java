@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.bittiger.janescookies.tinyflickr;
+package com.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

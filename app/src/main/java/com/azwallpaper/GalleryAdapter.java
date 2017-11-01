@@ -1,23 +1,17 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BlurMaskFilter;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.azwallpaper.R;
+import com.utils.Blur;
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -25,7 +19,7 @@ import com.squareup.picasso.Transformation;
 import java.util.List;
 
 /**
- * Created by xicheng on 16/6/16.
+
  */
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
@@ -92,15 +86,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             }
         });
 
-       /* switch (position % 5) {
-            case 0 : holder.mImageView.setImageResource(R.mipmap.ic_launcher); break;
-            case 1 : holder.mImageView.setImageResource(R.mipmap.ic_launcher); break;
-            case 2 : holder.mImageView.setImageResource(R.mipmap.ic_launcher); break;
-            case 3 : holder.mImageView.setImageResource(R.mipmap.ic_launcher); break;
-            case 4 : holder.mImageView.setImageResource(R.mipmap.ic_launcher); break;
-        }
-*/
-        Glide.with(mContext)
+       /* Glide.with(mContext)
                 .load(item.getUrl())
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
@@ -110,21 +96,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         try{
                            // holder.mImageView.setImageBitmap(resource);
 
-                            // This is the quick and easy integration path.
-// May not be optimal (since you're dipping in and out of threads)
-                        /*    Palette.from(resource).maximumColorCount(2).generate(new Palette.PaletteAsyncListener() {
-                                @Override
-                                public void onGenerated(Palette palette) {
-                                    // Get the "vibrant" color swatch based on the bitmap
-                                    Palette.Swatch vibrant = palette.getVibrantSwatch();
-                                    if (vibrant != null) {
-                                        // Set the background color of a layout based on the vibrant color
-                                        holder.tvTitle.setBackgroundColor(vibrant.getRgb());
-                                        // Update the title TextView with the proper text color
-                                        holder.tvTitle.setTextColor(vibrant.getTitleTextColor());
-                                    }
-                                }
-                            });*/
 
                             Palette.from(resource)
                                     .generate(new Palette.PaletteAsyncListener() {
@@ -149,11 +120,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         }
                     }
                 });
-
+*/
         Picasso.with(mContext)
                 .load(item.getUrl())
-                .resize(20, 30)
-                .placeholder(R.mipmap.ic_launcher)
+                .resize(10, 10)
+                //.fit()
+                //.centerCrop()
+
                 .error(R.mipmap.ic_launcher)
                 .transform(blurTransformation)
                 .into(holder.mImageView, new com.squareup.picasso.Callback() {
@@ -162,9 +135,10 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         Picasso.with(mContext)
                                 .load(item.getUrl()) // image url goes here
                                 // .resize(imageViewWidth, imageViewHeight)
-                                .resize(175, 250)
-                                // .resize(holder.ivImage.getWidth(), holder.ivImage.getHeight())
-                                .placeholder(holder.mImageView.getDrawable())
+                                /*.fit()
+                                .centerCrop()*/
+                                 //.resize(holder.mImageView.getWidth(), holder.mImageView.getHeight())
+
                                 .into(holder.mImageView);
                     }
 
@@ -172,11 +146,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                     public void onError() {
                     }
                 });
-
-       /* Glide.with(mContext)
+/*
+        Glide.with(mContext)
                 .load(item.getUrl())
                 .thumbnail(0.5f)
-                .into(holder.mImageView);*/
+                .into(holder.mImageView);
+*/
 
     }
     @Override

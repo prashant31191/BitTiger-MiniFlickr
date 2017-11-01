@@ -1,11 +1,11 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
 import android.util.Log;
 
 import java.io.Serializable;
 
 /**
- * Created by xicheng on 16/6/17.
+
  */
 public class GalleryItem implements Serializable  {
 

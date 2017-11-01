@@ -1,23 +1,17 @@
-package com.android.bittiger.janescookies.tinyflickr;
+package com.azwallpaper;
 
-import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.SearchView.OnQueryTextListener;
 
 
 import android.util.Log;
@@ -27,22 +21,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.SearchView;
 //import android.support.v7.widget.SearchView;
 
-import android.widget.TextView;
-
-import com.android.volley.Request;
+import com.api.UrlManager;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.reginald.swiperefresh.CustomSwipeRefreshLayout;
 
@@ -54,12 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by xicheng on 16/6/16.
+
  */
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment" ;
 
-    private static final int COLUMN_NUM = 2;
+    private static final int COLUMN_NUM = 1;
     private static final int ITEM_PER_PAGE = 100;
 
     private RequestQueue mRq;

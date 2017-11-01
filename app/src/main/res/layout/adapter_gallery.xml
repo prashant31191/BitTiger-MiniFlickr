@@ -10,7 +10,7 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_margin="5dp"
         app:cardCornerRadius="5dp"
         app:cardElevation="2dp">
@@ -23,25 +23,15 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center">
 
-            <com.fmsirvent.ParallaxEverywhere.PEWImageView
-                android:id="@+id/ivImage"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:src="@color/colorPrimary" />
-
                 <com.fmsirvent.ParallaxEverywhere.PEWImageView
                     android:id="@+id/gallery_item"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-
+                    android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    pew:reverse="reverseX"
-                    android:src="@drawable/ic_burst_mode_red_300_36dp" />
+                    pew:reverse="reverseY"
+                    />
 
                 <TextView
                 android:id="@+id/tvTitle"
