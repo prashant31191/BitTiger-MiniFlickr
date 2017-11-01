@@ -1,6 +1,8 @@
 package com.azwallpaper;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -10,13 +12,36 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fmsirvent.ParallaxEverywhere.PEWImageView;
+import com.model.JsonDashboardModel;
+import com.model.JsonImageModel;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
+import com.utils.Blur;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView mRecyclerView;
+    private GridLayoutManager mLayoutManager;
+    private static final int COLUMN_NUM = 1;
+    private GalleryAdapter mAdapter;
+    ArrayList<JsonDashboardModel> arrayListJsonDashboardModel = new ArrayList<>();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +50,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+
+       
+        
+        
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,6 +74,24 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+         arrayListJsonDashboardModel = App.gettingRecordFromJsonDashboard(R.raw.dashboard);
+        if(arrayListJsonDashboardModel !=null) {
+            App.showLog("====arrayListJsonDashboardModel===" + arrayListJsonDashboardModel.size());
+
+
+            mLayoutManager = new GridLayoutManager(DashboardActivity.this, COLUMN_NUM);
+
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            mAdapter = new GalleryAdapter(DashboardActivity.this, arrayListJsonDashboardModel);
+//        Log.d("Contact", "--------onCreateView----- generate 100 items for Adapter");
+//
+//        mAdapter = new GalleryAdapter(getActivity(), Contact.generateSampleList(100));
+
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
 
@@ -122,4 +172,115 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
     }
+
+
+    public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
+
+        private Context mContext;   // get resource of this component
+        private List<JsonDashboardModel> mList;
+        public GalleryAdapter(Context mContext, List<JsonDashboardModel> mList) {
+            this.mContext = mContext;
+            this.mList = mList;
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public PEWImageView mImageView;
+            public TextView tvTitle;
+
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                mImageView = (PEWImageView) itemView.findViewById(R.id.gallery_item);
+                tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+
+            }
+        }
+
+        @Override
+        public GalleryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_dashboard,
+                    parent, false);
+            GalleryAdapter.ViewHolder vh = new GalleryAdapter.ViewHolder(v);
+            return vh;
+        }
+
+
+        @Override
+        public void onBindViewHolder(final GalleryAdapter.ViewHolder holder, final int position) {
+//        Contact item = mList.get(position);
+            final JsonDashboardModel item = mList.get(position);
+            holder.tvTitle.setText(item.name);
+            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(DashboardActivity.this,LocalWallpaperActivity.class);
+                    intent.putExtra("id",mList.get(position).id);
+                    intent.putExtra("title",mList.get(position).name);
+                    startActivity(intent);
+
+
+
+                }
+            });
+
+            Picasso.with(mContext)
+                    .load(item.image)
+                    .resize(10, 10)
+                    //.fit()
+                    //.centerCrop()
+
+                    .error(R.mipmap.ic_launcher)
+                    .transform(blurTransformation)
+                    .into(holder.mImageView, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Picasso.with(mContext)
+                                    .load(item.image) // image url goes here
+                                  
+                                    .into(holder.mImageView);
+                        }
+
+                        @Override
+                        public void onError() {
+                        }
+                    });
+
+        }
+        @Override
+        public int getItemCount() {
+            return mList.size();
+        }
+
+        //    public void addAll(List<Contact> newList) {
+        public void addAll(List<JsonDashboardModel> newList) {
+            mList.addAll(newList);
+        }
+
+        public void add(JsonDashboardModel item) {
+            mList.add(item);
+        }
+
+        public void clear() {
+            mList.clear();
+        }
+
+
+
+
+        Transformation blurTransformation = new Transformation() {
+            @Override
+            public Bitmap transform(Bitmap source) {
+                Bitmap blurred = Blur.fastblur(mContext, source, 10);
+                source.recycle();
+                return blurred;
+            }
+
+            @Override
+            public String key() {
+                return "blur()";
+            }
+        };
+    }
+
 }
