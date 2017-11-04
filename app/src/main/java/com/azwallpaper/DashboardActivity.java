@@ -214,11 +214,18 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(DashboardActivity.this,LocalWallpaperActivity.class);
-                    intent.putExtra("id",mList.get(position).id);
-                    intent.putExtra("title",mList.get(position).name);
-                    startActivity(intent);
+                    if(mList.get(position).id !=null && mList.get(position).id.equalsIgnoreCase("12"))
+                    {
+                        Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
 
+                        Intent intent = new Intent(DashboardActivity.this, LocalWallpaperActivity.class);
+                        intent.putExtra("id", mList.get(position).id);
+                        intent.putExtra("title", mList.get(position).name);
+                        startActivity(intent);
+                    }
 
 
                 }

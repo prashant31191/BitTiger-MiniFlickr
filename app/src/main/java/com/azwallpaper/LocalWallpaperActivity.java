@@ -3,26 +3,39 @@ package com.azwallpaper;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
 import com.model.JsonImageModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.utils.Blur;
+import com.utils.TouchImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +49,14 @@ public class LocalWallpaperActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private ProgressBar progressBar;
     private GridLayoutManager mLayoutManager;
-    private static final int COLUMN_NUM = 1;
+    private static final int COLUMN_NUM = 2;
     private GalleryAdapter mAdapter;
 
+    RelativeLayout rlImage;
+    TouchImageView ivFullScreen;
+    ImageView ivClose;
+    TextView tvSetWallpaper;
+Bitmap bitmap = null;
 
     String id = "1";
     String strTitle = "Wallpaper";
@@ -66,7 +84,45 @@ public class LocalWallpaperActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        rlImage = (RelativeLayout) findViewById(R.id.rlImage);
+        ivFullScreen = (TouchImageView) findViewById(R.id.ivFullScreen);
+        ivClose = (ImageView) findViewById(R.id.ivClose);
+        tvSetWallpaper = (TextView) findViewById(R.id.tvSetWallpaper);
+
+        tvSetWallpaper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bitmap !=null)
+                {
+                    progressBar.setVisibility(View.VISIBLE);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            setWallpaper();
+                        }
+                    },500);
+
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please wait Image is Loading...!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressBar.setVisibility(View.GONE);
+                rlImage.setVisibility(View.GONE);
+
+
+            }
+        });
+
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         mRecyclerView.setHasFixedSize(true);
@@ -112,6 +168,35 @@ public class LocalWallpaperActivity extends AppCompatActivity {
 
     }
 
+
+    private void setWallpaper()
+    {
+        String filename = "wallpaper.png";
+        File sd = Environment.getExternalStorageDirectory();
+        File dest = new File(sd, filename);
+
+        try {
+            FileOutputStream out = new FileOutputStream(dest);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+
+
+            Uri uri = Uri.fromFile(dest);
+            Intent intent = new Intent(Intent.ACTION_ATTACH_DATA);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setDataAndType(uri, "image/*");
+            intent.putExtra("mimeType", "image/*");
+
+            progressBar.setVisibility(View.GONE);
+            this.startActivity(Intent.createChooser(intent, "Set as :"));
+
+        } catch (Exception e) {
+            progressBar.setVisibility(View.GONE);
+            e.printStackTrace();
+        }
+    }
+
     public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
         private Context mContext;   // get resource of this component
@@ -125,19 +210,21 @@ public class LocalWallpaperActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public PEWImageView mImageView;
             public TextView tvTitle;
+            public CardView cvCard;
 
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 mImageView = (PEWImageView) itemView.findViewById(R.id.gallery_item);
                 tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+                cvCard = (CardView) itemView.findViewById(R.id.cvCard);
 
             }
         }
 
         @Override
         public GalleryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_gallery,
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_wallpaper,
                     parent, false);
             GalleryAdapter.ViewHolder vh = new GalleryAdapter.ViewHolder(v);
             return vh;
@@ -145,19 +232,47 @@ public class LocalWallpaperActivity extends AppCompatActivity {
 
 
         @Override
-        public void onBindViewHolder(final GalleryAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(final GalleryAdapter.ViewHolder holder,final int position) {
 //        Contact item = mList.get(position);
             final JsonImageModel item = mList.get(position);
-            holder.tvTitle.setText(item.title);
-            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            holder.tvTitle.setText(position+" ♥ "+item.title);
+            holder.cvCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //App.expand2(rlImage);
+                    rlImage.setVisibility(View.VISIBLE);//
+                    progressBar.setVisibility(View.VISIBLE);
 
+                    App.showLog("==img=="+mList.get(position).thumbnail_url);
+
+                    Glide.with(LocalWallpaperActivity.this).load(mList.get(position).image_path).asBitmap().into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            try {
+                                bitmap = resource;
+                                ivFullScreen.setImageBitmap(resource);
+                                progressBar.setVisibility(View.GONE);
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    Glide.with(LocalWallpaperActivity.this).load(mList.get(position).image_path).placeholder(R.color.light_gray).into(ivFullScreen);
 
                 }
             });
 
-            Picasso.with(mContext)
+            Glide.with(LocalWallpaperActivity.this)
+                    .load(item.thumbnail_url)
+                    .thumbnail(0.5f)
+                    .placeholder(R.color.light_gray)
+                    .into(holder.mImageView);
+
+
+
+         /*   Picasso.with(mContext)
                     .load(item.thumbnail_url)
                     .resize(10, 10)
                     //.fit()
@@ -177,7 +292,7 @@ public class LocalWallpaperActivity extends AppCompatActivity {
                         @Override
                         public void onError() {
                         }
-                    });
+                    });*/
 
         }
 
@@ -216,4 +331,14 @@ public class LocalWallpaperActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        if(ivClose !=null && rlImage !=null && rlImage.getVisibility() == View.VISIBLE)
+        {
+            ivClose.performClick();
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 }
