@@ -61,8 +61,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
+                startActivity(intent);
+                /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("Action", null).show();*/
             }
         });
 
