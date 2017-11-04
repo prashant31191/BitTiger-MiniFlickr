@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,13 +24,18 @@ import android.widget.Toast;
 
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
 import com.model.JsonDashboardModel;
-import com.model.JsonImageModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.utils.Blur;
+import com.utils.RealmBackupRestore;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -41,60 +45,149 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     private GalleryAdapter mAdapter;
     ArrayList<JsonDashboardModel> arrayListJsonDashboardModel = new ArrayList<>();
 
-
+    Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        try {
+            setContentView(R.layout.activity_dashboard);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setHasFixedSize(true);
+            mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            mRecyclerView.setHasFixedSize(true);
 
 
-       
-        
-        
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
-                startActivity(intent);
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
+                    startActivity(intent);
+
+
+
+
                 /*
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
+                }
+            });
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+
+
+
+
+
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
+            // Clear the realm from last time
+            // Realm.deleteRealm(realmConfiguration);
+            realm = Realm.getInstance(realmConfiguration);
+
+            RealmBackupRestore realmBackupRestore = new  RealmBackupRestore(DashboardActivity.this,realm);
+            //realmBackupRestore.backup();
+            realmBackupRestore.restore();
+
+            // Clear the realm from last time
+            // Realm.deleteRealm(realmConfiguration);
+            realm = Realm.getInstance(realmConfiguration);
+
+
+
+// for the insert # !@#!@#
+//  # !@#!@#
+
+            if (realm != null && arrayListJsonDashboardModel != null) {
+                //  # !@#!@#  insertDashboard();
+                getDataDashboard();
+            } else {
+                App.showLog("===no insert database dashboard==");
             }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
 
-         arrayListJsonDashboardModel = App.gettingRecordFromJsonDashboard(R.raw.dashboard);
-        if(arrayListJsonDashboardModel !=null) {
-            App.showLog("====arrayListJsonDashboardModel===" + arrayListJsonDashboardModel.size());
 
 
-            mLayoutManager = new GridLayoutManager(DashboardActivity.this, COLUMN_NUM);
-
-            mRecyclerView.setLayoutManager(mLayoutManager);
-
-            mAdapter = new GalleryAdapter(DashboardActivity.this, arrayListJsonDashboardModel);
-//        Log.d("Contact", "--------onCreateView----- generate 100 items for Adapter");
-//
-//        mAdapter = new GalleryAdapter(getActivity(), Contact.generateSampleList(100));
-
-            mRecyclerView.setAdapter(mAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    boolean isInserted = false;
+    private void insertDashboard() {
+        try {
+            App.showLog("========insertDashboard=====");
+            arrayListJsonDashboardModel = App.gettingRecordFromJsonDashboard(R.raw.dashboard);
+
+            if (arrayListJsonDashboardModel != null) {
+
+                isInserted = true;
+                realm.beginTransaction();
+                Collection<JsonDashboardModel> realmDJsonDashboardModel = realm.copyToRealm(arrayListJsonDashboardModel);
+                realm.commitTransaction();
+
+                getDataDashboard();
+
+            } else {
+                App.showLog("===arrayListJsonDashboardModel ==null==no insert database dashboard==");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getDataDashboard() {
+        try {
+            App.showLog("========getDataDashboard=====");
+
+            RealmResults<JsonDashboardModel> arrDLocationModel = realm.where(JsonDashboardModel.class).findAll();
+            App.sLog("===arrDLocationModel==" + arrDLocationModel);
+            List<JsonDashboardModel> arraDLocationModel = arrDLocationModel;
+            arrayListJsonDashboardModel = new ArrayList<JsonDashboardModel>(arraDLocationModel);
+
+            if (arrayListJsonDashboardModel != null) {
+                App.showLog("====arrayListJsonDashboardModel===" + arrayListJsonDashboardModel.size());
+
+
+
+                mLayoutManager = new GridLayoutManager(DashboardActivity.this, COLUMN_NUM);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                mAdapter = new GalleryAdapter(DashboardActivity.this, arrayListJsonDashboardModel);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            if(arrayListJsonDashboardModel.size() > 0)
+            {
+
+            }
+            else
+            {
+                if(isInserted == false)
+                {
+                    insertDashboard();
+                }
+            }
+
+            /*
+            for (int k = 0; k < arrayListJsonDashboardModel.size(); k++) {
+                App.sLog(k + "===arrayListJsonDashboardModel==" + arrayListJsonDashboardModel.get(k).name);
+            }*/
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -181,6 +274,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
         private Context mContext;   // get resource of this component
         private List<JsonDashboardModel> mList;
+
         public GalleryAdapter(Context mContext, List<JsonDashboardModel> mList) {
             this.mContext = mContext;
             this.mList = mList;
@@ -217,12 +311,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onClick(View v) {
 
-                    if(mList.get(position).id !=null && mList.get(position).id.equalsIgnoreCase("12"))
-                    {
+                    if (mList.get(position).id != null && mList.get(position).id.equalsIgnoreCase("14")) {
                         Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
                         startActivity(intent);
-                    }
-                    else {
+                    } else {
 
                         Intent intent = new Intent(DashboardActivity.this, LocalWallpaperActivity.class);
                         intent.putExtra("id", mList.get(position).id);
@@ -247,7 +339,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         public void onSuccess() {
                             Picasso.with(mContext)
                                     .load(item.image) // image url goes here
-                                  
+
                                     .into(holder.mImageView);
                         }
 
@@ -257,6 +349,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     });
 
         }
+
         @Override
         public int getItemCount() {
             return mList.size();
@@ -276,8 +369,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         }
 
 
-
-
         Transformation blurTransformation = new Transformation() {
             @Override
             public Bitmap transform(Bitmap source) {
@@ -293,4 +384,12 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         };
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(realm !=null)
+        {
+            realm.close();
+        }
+    }
 }

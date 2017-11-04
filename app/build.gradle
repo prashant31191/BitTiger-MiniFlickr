@@ -77,6 +77,8 @@ dependencies {
     // for the multi dex
     compile 'com.android.support:multidex:1.0.1'
 
+    compile 'com.google.code.gson:gson:2.8.2'
+
 // for the fabric crash analytic
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true;

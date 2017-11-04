@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
+import com.model.GsonResponseWallpaperList;
 import com.model.JsonDashboardModel;
 import com.model.JsonImageModel;
 import com.utils.SharePrefrences;
@@ -42,11 +44,15 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import io.realm.RealmResults;
+
 /**
  * Created by prashant.patel on 7/20/2017.
  */
@@ -454,7 +460,7 @@ public class App extends Application {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.v("Text Data", byteArrayOutputStream.toString());
+           // Log.v("Text Data", byteArrayOutputStream.toString());
             try {
 
                 // Parse the data into jsonobject to get original data in form of json.
@@ -480,7 +486,7 @@ public class App extends Application {
                     jsonImageModel.thumbnail_url = thumbnail_url;
                     arrayListDLocationModel.add(jsonImageModel);
 
-                    Log.i("=====","==title=="+title);
+                 //   Log.i("=====","==title=="+title);
                 }
                 return arrayListDLocationModel;
             } catch (Exception e) {
@@ -556,5 +562,75 @@ public class App extends Application {
             e.printStackTrace();
             return arrayListDLocationModel;
         }
+    }
+
+
+    public static ArrayList<JsonImageModel>  getJsonFromGson(String strFilename, String id, Realm realm)
+    {
+        String json = null;
+        try {
+            InputStream inputStream = mContext.getAssets().open(strFilename);
+            int size = inputStream.available();
+            byte[] buffer = new byte[size];
+            inputStream.read(buffer);
+            inputStream.close();
+            json = new String(buffer, "UTF-8");
+
+            Gson gson =new Gson();
+            GsonResponseWallpaperList gsonResponseWallpaperList = gson.fromJson(json, GsonResponseWallpaperList.class);
+            gsonResponseWallpaperList.filename = strFilename;
+
+            if(gsonResponseWallpaperList  !=null && gsonResponseWallpaperList .arrayListJsonImageModel !=null)
+            {
+                insertWallpaper(realm,gsonResponseWallpaperList );
+
+                return null;
+                //return gsonResponseWallpaperList.arrayListJsonImageModel;
+            }
+            else {
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public static void insertWallpaper(Realm realm, GsonResponseWallpaperList gsonResponseWallpaperList) {
+        try {
+            App.showLog("========insertWallpaper=====");
+
+            realm.beginTransaction();
+            GsonResponseWallpaperList realmDJsonDashboardModel = realm.copyToRealm(gsonResponseWallpaperList);
+            realm.commitTransaction();
+
+            getDataWallpaper(realm);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getDataWallpaper(Realm realm) {
+        try {
+            App.showLog("========getDataWallpaper=====");
+            ArrayList<GsonResponseWallpaperList> arrGsonResponseWallpaperList = new ArrayList<>();
+
+            RealmResults<GsonResponseWallpaperList> arrDLocationModel = realm.where(GsonResponseWallpaperList.class).findAll();
+            App.sLog("===arrDLocationModel==" + arrDLocationModel);
+            List<GsonResponseWallpaperList> gsonResponseWallpaperList = arrDLocationModel;
+            arrGsonResponseWallpaperList = new ArrayList<GsonResponseWallpaperList>(gsonResponseWallpaperList);
+
+            for (int k = 0; k < arrGsonResponseWallpaperList.size(); k++) {
+                App.sLog(k + "===arrGsonResponseWallpaperList=name=" + arrGsonResponseWallpaperList.get(k).filename);
+
+                App.sLog(k + "===arrGsonResponseWallpaperList=size=" + arrGsonResponseWallpaperList.get(k).arrayListJsonImageModel.size());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -1,5 +1,12 @@
 {
   "dashboard": [
+
+    {
+      "id": "13",
+      "name": "Most Popular",
+      "keyword": "Popular Wallpaper",
+      "image": "http://img2.launcher.ksmobile.com/534x474/2016-12-08/302838_a77c8c0c.jpg"
+    },
     {
       "id": "1",
       "name": "Cool",
@@ -68,9 +75,15 @@
     },
     {
       "id": "12",
+      "name": "Other",
+      "keyword": "Other Wallpaper",
+      "image": "http://img2.launcher.ksmobile.com/534x474/2016-12-08/330136_ab88d864.jpg"
+    },
+    {
+      "id": "14",
       "name": "Search More",
-      "keyword": "Mountain Wallpaper",
-      "image": "http://farm5.static.flickr.com/4581/38143476381_d8b2ab022f.jpg"
+      "keyword": "Search Wallpaper",
+      "image": "http://img2.launcher.ksmobile.com/534x474/2016-12-29/321323_01e92378.jpg"
     }
   ],
   "feature": [

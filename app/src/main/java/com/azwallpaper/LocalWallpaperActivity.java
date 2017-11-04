@@ -1,7 +1,6 @@
 package com.azwallpaper;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,8 +27,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
+import com.model.GsonResponseWallpaperList;
 import com.model.JsonImageModel;
-import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.utils.Blur;
 import com.utils.TouchImageView;
@@ -37,7 +36,12 @@ import com.utils.TouchImageView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 
 /**
@@ -56,10 +60,14 @@ public class LocalWallpaperActivity extends AppCompatActivity {
     TouchImageView ivFullScreen;
     ImageView ivClose;
     TextView tvSetWallpaper;
-Bitmap bitmap = null;
+    Bitmap bitmap = null;
 
     String id = "1";
     String strTitle = "Wallpaper";
+
+
+    Realm realm;
+
     /**
      * Sets the Action Bar for new Android versions.
      */
@@ -67,9 +75,7 @@ Bitmap bitmap = null;
     private void actionBarSetup() {
         try {
             ((LocalWallpaperActivity) this).getSupportActionBar().setTitle(strTitle);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -92,19 +98,16 @@ Bitmap bitmap = null;
         tvSetWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(bitmap !=null)
-                {
+                if (bitmap != null) {
                     progressBar.setVisibility(View.VISIBLE);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             setWallpaper();
                         }
-                    },500);
+                    }, 500);
 
-                }
-                else
-                {
+                } else {
                     Toast.makeText(getApplicationContext(), "Please wait Image is Loading...!", Toast.LENGTH_LONG).show();
                 }
             }
@@ -141,10 +144,48 @@ Bitmap bitmap = null;
 
         if (id != null) {
 
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
+           /* // Clear the realm from last time
+            Realm.deleteRealm(realmConfiguration);
+*/
+            realm = Realm.getInstance(realmConfiguration);
+
+
+            if (realm != null) {
+
+                // insertValues();
+                getWallpaperValues();
+
+            } else {
+                App.showLog("=====realm===null==");
+            }
+        } else {
+            progressBar.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void insertValues() {
+        try {
+            // for the insert value
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ArrayList<JsonImageModel> arrayListJsonImageModel = App.gettingRecordFromJson("z" + id + "cate_.json");
+
+                    ArrayList<JsonImageModel> arrayListJsonImageModel = new ArrayList<>();
+                    if (id.equalsIgnoreCase("13")) {
+                        arrayListJsonImageModel = App.getJsonFromGson("popular.json", id, realm);
+                        // App.gettingRecordFromJson("popular.json");
+                        //arrayListJsonImageModel = App.gettingRecordFromJson("z12cate_.json");
+                        //arrayListJsonImageModel = App.gettingRecordFromJson("popular.json");
+                        Collections.reverse(arrayListJsonImageModel);
+                    } else if (id.equalsIgnoreCase("12")) {
+                        arrayListJsonImageModel = App.getJsonFromGson("z" + id + "cate_.json", id, realm);
+                        Collections.reverse(arrayListJsonImageModel);
+                    } else {
+                        arrayListJsonImageModel = App.getJsonFromGson("z" + id + "cate_.json", id, realm);
+                        //arrayListJsonImageModel = App.gettingRecordFromJson("z" + id + "cate_.json");
+                    }
                     if (arrayListJsonImageModel != null) {
                         App.showLog("====arrayListJsonImageModel===" + arrayListJsonImageModel.size());
                         mLayoutManager = new GridLayoutManager(LocalWallpaperActivity.this, COLUMN_NUM);
@@ -152,25 +193,102 @@ Bitmap bitmap = null;
                         mAdapter = new GalleryAdapter(LocalWallpaperActivity.this, arrayListJsonImageModel);
                         mRecyclerView.setAdapter(mAdapter);
                         progressBar.setVisibility(View.GONE);
-                    }
-                    else
-                    {
+                    } else {
                         progressBar.setVisibility(View.GONE);
                     }
                 }
-            },1500);
-
+            }, 1500);
         }
-        else
+        catch (Exception e)
         {
-            progressBar.setVisibility(View.GONE);
+            e.printStackTrace();
         }
 
     }
 
 
-    private void setWallpaper()
-    {
+    private void getWallpaperValues() {
+        try {
+            // for the insert value
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    ArrayList<JsonImageModel> arrayListJsonImageModel = new ArrayList<>();
+                    if (id.equalsIgnoreCase("13")) {
+                        arrayListJsonImageModel = getDataWallpaper("popular.json", id, realm);
+                        // App.gettingRecordFromJson("popular.json");
+                        //arrayListJsonImageModel = App.gettingRecordFromJson("z12cate_.json");
+                        //arrayListJsonImageModel = App.gettingRecordFromJson("popular.json");
+                        Collections.reverse(arrayListJsonImageModel);
+                    } else if (id.equalsIgnoreCase("12")) {
+                        arrayListJsonImageModel = getDataWallpaper("z" + id + "cate_.json", id, realm);
+                        Collections.reverse(arrayListJsonImageModel);
+                    } else {
+                        arrayListJsonImageModel = getDataWallpaper("z" + id + "cate_.json", id, realm);
+                        //arrayListJsonImageModel = App.gettingRecordFromJson("z" + id + "cate_.json");
+                    }
+                    if (arrayListJsonImageModel != null) {
+                        App.showLog("====arrayListJsonImageModel===" + arrayListJsonImageModel.size());
+                        mLayoutManager = new GridLayoutManager(LocalWallpaperActivity.this, COLUMN_NUM);
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        mAdapter = new GalleryAdapter(LocalWallpaperActivity.this, arrayListJsonImageModel);
+                        mRecyclerView.setAdapter(mAdapter);
+                        progressBar.setVisibility(View.GONE);
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+            }, 1500);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public ArrayList<JsonImageModel> getDataWallpaper(String strFileName,String id,Realm realm) {
+        List<JsonImageModel> list = new ArrayList<>();
+        try {
+
+            App.showLog("========getDataWallpaper=====");
+            ArrayList<GsonResponseWallpaperList> arrGsonResponseWallpaperList = new ArrayList<>();
+
+            RealmResults<GsonResponseWallpaperList> arrDLocationModel = realm.where(GsonResponseWallpaperList.class)
+                    .beginGroup()
+                    .equalTo("filename", strFileName)
+                    /*.or()
+                    .contains("name", "Jo")*/
+                    .endGroup()
+
+                    .findAll();
+
+            App.sLog("===arrDLocationModel==" + arrDLocationModel);
+            List<GsonResponseWallpaperList> gsonResponseWallpaperList = arrDLocationModel;
+            arrGsonResponseWallpaperList = new ArrayList<GsonResponseWallpaperList>(gsonResponseWallpaperList);
+
+            for (int k = 0; k < arrGsonResponseWallpaperList.size(); k++) {
+                App.sLog(k + "===arrGsonResponseWallpaperList=name=" + arrGsonResponseWallpaperList.get(k).filename);
+
+                if( arrGsonResponseWallpaperList.get(k).arrayListJsonImageModel !=null && arrGsonResponseWallpaperList.get(k).arrayListJsonImageModel.size() > 0)
+                {
+                    App.sLog(k + "===arrGsonResponseWallpaperList=size=" + arrGsonResponseWallpaperList.get(k).arrayListJsonImageModel.size());
+                    list = arrGsonResponseWallpaperList.get(k).arrayListJsonImageModel;
+
+
+                    break;
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return  new ArrayList<JsonImageModel>(list);
+    }
+
+    private void setWallpaper() {
         String filename = "wallpaper.png";
         File sd = Environment.getExternalStorageDirectory();
         File dest = new File(sd, filename);
@@ -232,10 +350,10 @@ Bitmap bitmap = null;
 
 
         @Override
-        public void onBindViewHolder(final GalleryAdapter.ViewHolder holder,final int position) {
+        public void onBindViewHolder(final GalleryAdapter.ViewHolder holder, final int position) {
 //        Contact item = mList.get(position);
             final JsonImageModel item = mList.get(position);
-            holder.tvTitle.setText(position+" ♥ "+item.title);
+            holder.tvTitle.setText(position + " ♥ " + item.title);
             holder.cvCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -243,7 +361,7 @@ Bitmap bitmap = null;
                     rlImage.setVisibility(View.VISIBLE);//
                     progressBar.setVisibility(View.VISIBLE);
 
-                    App.showLog("==img=="+mList.get(position).thumbnail_url);
+                    App.showLog("==img==" + mList.get(position).thumbnail_url);
 
                     Glide.with(LocalWallpaperActivity.this).load(mList.get(position).image_path).asBitmap().into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -252,9 +370,7 @@ Bitmap bitmap = null;
                                 bitmap = resource;
                                 ivFullScreen.setImageBitmap(resource);
                                 progressBar.setVisibility(View.GONE);
-                            }
-                            catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
@@ -332,12 +448,18 @@ Bitmap bitmap = null;
 
 
     @Override
-    public void onBackPressed() {
-        if(ivClose !=null && rlImage !=null && rlImage.getVisibility() == View.VISIBLE)
-        {
-            ivClose.performClick();
+    protected void onDestroy() {
+        super.onDestroy();
+        if (realm != null) {
+            realm.close();
         }
-        else {
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (ivClose != null && rlImage != null && rlImage.getVisibility() == View.VISIBLE) {
+            ivClose.performClick();
+        } else {
             super.onBackPressed();
         }
     }
