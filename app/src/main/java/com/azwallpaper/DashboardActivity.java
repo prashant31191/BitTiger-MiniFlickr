@@ -60,7 +60,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             mRecyclerView.setHasFixedSize(true);
 
 
-            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
             FloatingActionButton fabCreateBackup = (FloatingActionButton) findViewById(R.id.fabCreateBackup);
             FloatingActionButton fabRestoreBackup = (FloatingActionButton) findViewById(R.id.fabRestoreBackup);
 
@@ -73,10 +73,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         .setAction("Yes", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+
                                 RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
                                 realmBackupRestore.restore();
 
-                                realm = Realm.getInstance(App.getRealmConfiguration());
                             }
                         }).show();
                 }
@@ -94,7 +94,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                     RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
                                     realmBackupRestore.backup();
 
-                                    realm = Realm.getInstance(App.getRealmConfiguration());
                                 }
                             }).show();
                 }
@@ -134,9 +133,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
             //RealmConfiguration realmConfiguration =
 
-            /*RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                   // .encryptionKey(App.getEncryptRawKey())
-                    .build();*/
+/*
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                    .encryptionKey(App.getEncryptRawKey())
+                    .build();
+*/
 
 
             // Clear the realm from last time
@@ -357,7 +358,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                         Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
                         startActivity(intent);
                     } else {
-
                         Intent intent = new Intent(DashboardActivity.this, LocalWallpaperActivity.class);
                         intent.putExtra("id", mList.get(position).id);
                         intent.putExtra("title", mList.get(position).name);

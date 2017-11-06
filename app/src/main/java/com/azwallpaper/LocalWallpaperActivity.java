@@ -157,14 +157,12 @@ public class LocalWallpaperActivity extends AppCompatActivity {
            /* // Clear the realm from last time
             Realm.deleteRealm(realmConfiguration);
 */
-/*
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                    //.encryptionKey(App.getEncryptRawKey())
+            /*RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                    .encryptionKey(App.getEncryptRawKey())
                     .build();
-
-            realm = Realm.getInstance(realmConfiguration);
-            */
-            realm = Realm.getInstance(App.getRealmConfiguration());
+*/
+            //realm = Realm.getInstance(realmConfiguration);
+           realm = Realm.getInstance(App.getRealmConfiguration());
 
 
             if (realm != null) {

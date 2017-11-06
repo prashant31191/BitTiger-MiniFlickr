@@ -74,7 +74,7 @@ public class App extends Application {
 
     //for the realm database encryption and decryption key
     public static String RealmEncryptionKey = "f263575e7b00a977a8e915feb9bfb2f992b2b8f11eaaaaaaa46523132131689465413132132165469487987987643545465464abbbbbccdddffff111222333";
-
+    public static RealmConfiguration realmConfiguration;
 
     /*
     // Sending side
@@ -97,8 +97,6 @@ public class App extends Application {
 
     // for the set app fontface or type face
     static Typeface tf_Regular, tf_Bold;
-
-    public static RealmConfiguration realmConfiguration;
 
     public App() throws UnsupportedEncodingException {
     }
@@ -640,7 +638,7 @@ public class App extends Application {
         try {
             App.showLog("========insertWallpaper=====");
 
-            if(realm.isInTransaction())
+
             realm.beginTransaction();
             GsonResponseWallpaperList realmDJsonDashboardModel = realm.copyToRealm(gsonResponseWallpaperList);
             realm.commitTransaction();
@@ -648,8 +646,13 @@ public class App extends Application {
             getDataWallpaper(realm);
         } catch (Exception e) {
             e.printStackTrace();
-            realm.commitTransaction();
+            try {
+                realm.commitTransaction();
+            }
+            catch (Exception e2)
+            {e2.printStackTrace();}
         }
+
     }
 
     public static void getDataWallpaper(Realm realm) {
@@ -674,7 +677,7 @@ public class App extends Application {
         }
 
     }
-// for the encrypt Encrypt for the key
+// for the encrypt Encrypt
     public static byte[] getEncryptRawKey() {
 
         try {
@@ -696,18 +699,22 @@ public class App extends Application {
         }
     }
 
+
     public static RealmConfiguration getRealmConfiguration()
     {
         if(realmConfiguration !=null)
         {
             return realmConfiguration;
         }
-        else {
-             realmConfiguration = new RealmConfiguration.Builder()
-                    //.encryptionKey(App.getEncryptRawKey())
+        else
+        {
+
+            realmConfiguration = new RealmConfiguration.Builder()
+                    .encryptionKey(App.getEncryptRawKey())
                     .build();
             return realmConfiguration;
         }
     }
+
 
 }

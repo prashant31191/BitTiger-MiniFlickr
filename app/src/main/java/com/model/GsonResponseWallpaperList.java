@@ -20,7 +20,6 @@ public class GsonResponseWallpaperList extends RealmObject{
     public RealmList<JsonImageModel> arrayListJsonImageModel;
 
     //@PrimaryKey
-
     @PrimaryKey @Index
     @SerializedName("filename")
     public String filename;
