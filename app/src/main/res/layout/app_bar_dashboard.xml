@@ -45,4 +45,39 @@
         android:layout_margin="@dimen/fab_margin"/>
 
 
+    <RelativeLayout
+        android:id="@+id/rlBackup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="@dimen/fab_margin"
+        >
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fabCreateBackup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:src="@drawable/ic_backup_black_36dp"
+        app:backgroundTint="@color/material_redA700"
+        android:tint="@color/white"
+        app:elevation="3dp"
+        />
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fabRestoreBackup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/fabCreateBackup"
+            android:src="@drawable/ic_restore_black_36dp"
+            app:backgroundTint="@color/material_redA700"
+            android:tint="@color/white"
+            app:elevation="3dp"
+            android:layout_marginLeft="10dp"
+
+
+            />
+    </RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

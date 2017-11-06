@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -60,6 +61,46 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
 
             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            FloatingActionButton fabCreateBackup = (FloatingActionButton) findViewById(R.id.fabCreateBackup);
+            FloatingActionButton fabRestoreBackup = (FloatingActionButton) findViewById(R.id.fabRestoreBackup);
+
+            fabRestoreBackup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                Snackbar.make(view, "Are you sure restore backup ?", Snackbar.LENGTH_LONG)
+                        .setAction("Yes", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
+                                realmBackupRestore.restore();
+
+                                realm = Realm.getInstance(App.getRealmConfiguration());
+                            }
+                        }).show();
+                }
+            });
+
+            fabCreateBackup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+
+                    Snackbar.make(view, "Are you sure create backup ?", Snackbar.LENGTH_LONG)
+                            .setAction("Yes", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
+                                    realmBackupRestore.backup();
+
+                                    realm = Realm.getInstance(App.getRealmConfiguration());
+                                }
+                            }).show();
+                }
+            });
+
+
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

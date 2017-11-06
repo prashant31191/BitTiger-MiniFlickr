@@ -704,7 +704,7 @@ public class App extends Application {
         }
         else {
              realmConfiguration = new RealmConfiguration.Builder()
-                    .encryptionKey(App.getEncryptRawKey())
+                    //.encryptionKey(App.getEncryptRawKey())
                     .build();
             return realmConfiguration;
         }
