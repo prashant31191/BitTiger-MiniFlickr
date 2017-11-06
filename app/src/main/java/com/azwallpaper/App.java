@@ -677,7 +677,7 @@ public class App extends Application {
         }
 
     }
-// for the encrypt Encrypt qwerty
+// for the encrypt Encrypt
     public static byte[] getEncryptRawKey() {
 
         try {
