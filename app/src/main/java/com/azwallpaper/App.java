@@ -98,6 +98,8 @@ public class App extends Application {
     // for the set app fontface or type face
     static Typeface tf_Regular, tf_Bold;
 
+    public static RealmConfiguration realmConfiguration;
+
     public App() throws UnsupportedEncodingException {
     }
 
@@ -113,7 +115,7 @@ public class App extends Application {
 
             Realm.init(this);
             Fabric.with(this, new Crashlytics());
-
+            realmConfiguration = getRealmConfiguration();
 
             getFont_Regular();
             getFont_Bold();
@@ -696,12 +698,16 @@ public class App extends Application {
 
     public static RealmConfiguration getRealmConfiguration()
     {
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .encryptionKey(App.getEncryptRawKey())
-                .build();
-
-
-        return realmConfiguration;
+        if(realmConfiguration !=null)
+        {
+            return realmConfiguration;
+        }
+        else {
+             realmConfiguration = new RealmConfiguration.Builder()
+                    .encryptionKey(App.getEncryptRawKey())
+                    .build();
+            return realmConfiguration;
+        }
     }
 
 }

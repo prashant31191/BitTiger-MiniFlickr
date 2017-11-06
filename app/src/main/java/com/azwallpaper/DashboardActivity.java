@@ -93,15 +93,15 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
             //RealmConfiguration realmConfiguration =
 
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+            /*RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                    // .encryptionKey(App.getEncryptRawKey())
-                    .build();
+                    .build();*/
 
 
             // Clear the realm from last time
             // Realm.deleteRealm(realmConfiguration);
-            realm = Realm.getInstance(realmConfiguration);
-            //realm = Realm.getInstance(App.getRealmConfiguration());
+            //realm = Realm.getInstance(realmConfiguration);
+            realm = Realm.getInstance(App.getRealmConfiguration());
 
            /*
            RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
