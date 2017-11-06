@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.multidex.MultiDex;
 import android.text.Html;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,6 +42,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,8 +53,12 @@ import java.util.Date;
 import java.util.List;
 
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 /**
@@ -64,6 +72,19 @@ public class App extends Application {
     // app folder name
     public static String APP_FOLDERNAME = "azwallpaper";
 
+    //for the realm database encryption and decryption key
+    public static String RealmEncryptionKey = "f263575e7b00a977a8e915feb9bfb2f992b2b8f11eaaaaaaa46523132131689465413132132165469487987987643545465464abbbbbccdddffff111222333";
+
+
+    /*
+    // Sending side
+    public byte[] bytes64Key = App.RealmEncryptionKey.getBytes("UTF-8");
+
+    String base64 = Base64.encodeToString(bytes64Key, Base64.DEFAULT);
+    // Receiving side
+    byte[] dataReceive = Base64.decode(base64, Base64.DEFAULT);
+    String text = new String(dataReceive, "UTF-8");*/
+
     // share pref name
     public static String PREF_NAME = "azwallpaper_app";
 
@@ -76,6 +97,9 @@ public class App extends Application {
 
     // for the set app fontface or type face
     static Typeface tf_Regular, tf_Bold;
+
+    public App() throws UnsupportedEncodingException {
+    }
 
 
     @Override
@@ -567,6 +591,8 @@ public class App extends Application {
 
     public static ArrayList<JsonImageModel>  getJsonFromGson(String strFilename, String id, Realm realm)
     {
+        ArrayList<JsonImageModel> arrayList = new ArrayList<JsonImageModel>();
+
         String json = null;
         try {
             InputStream inputStream = mContext.getAssets().open(strFilename);
@@ -584,15 +610,26 @@ public class App extends Application {
             {
                 insertWallpaper(realm,gsonResponseWallpaperList );
 
-                return null;
-                //return gsonResponseWallpaperList.arrayListJsonImageModel;
+                //return null;
+
+                if(gsonResponseWallpaperList.arrayListJsonImageModel !=null) {
+                    List<JsonImageModel> list = gsonResponseWallpaperList.arrayListJsonImageModel;
+                    arrayList = new ArrayList<JsonImageModel>(list);
+
+                    return arrayList;
+                }
+                else
+                {
+                    return arrayList;
+                }
+
             }
             else {
-                return null;
+                return arrayList;
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return arrayList;
         }
 
     }
@@ -601,6 +638,7 @@ public class App extends Application {
         try {
             App.showLog("========insertWallpaper=====");
 
+            if(realm.isInTransaction())
             realm.beginTransaction();
             GsonResponseWallpaperList realmDJsonDashboardModel = realm.copyToRealm(gsonResponseWallpaperList);
             realm.commitTransaction();
@@ -608,6 +646,7 @@ public class App extends Application {
             getDataWallpaper(realm);
         } catch (Exception e) {
             e.printStackTrace();
+            realm.commitTransaction();
         }
     }
 
@@ -633,4 +672,36 @@ public class App extends Application {
         }
 
     }
+// for the encrypt Encrypt
+    public static byte[] getEncryptRawKey() {
+
+        try {
+            /*byte[] bytes64Key = App.RealmEncryptionKey.getBytes("UTF-8");
+            KeyGenerator kgen = KeyGenerator.getInstance("AES");
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+            sr.setSeed(bytes64Key);
+            kgen.init(128, sr);
+            SecretKey skey = kgen.generateKey();
+            byte[] raw = skey.getEncoded();*/
+
+            byte[] key = new BigInteger(App.RealmEncryptionKey,16).toByteArray();
+            return key;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static RealmConfiguration getRealmConfiguration()
+    {
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                .encryptionKey(App.getEncryptRawKey())
+                .build();
+
+
+        return realmConfiguration;
+    }
+
 }

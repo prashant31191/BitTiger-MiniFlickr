@@ -9,12 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,6 +37,9 @@ import com.utils.TouchImageView;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -144,17 +149,27 @@ public class LocalWallpaperActivity extends AppCompatActivity {
 
         if (id != null) {
 
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
+
+
+
+
+
            /* // Clear the realm from last time
             Realm.deleteRealm(realmConfiguration);
 */
+
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                    //.encryptionKey(App.getEncryptRawKey())
+                    .build();
+
             realm = Realm.getInstance(realmConfiguration);
+            //realm = Realm.getInstance(App.getRealmConfiguration());
 
 
             if (realm != null) {
 
-                // insertValues();
-                getWallpaperValues();
+                 insertValues();
+                //getWallpaperValues();
 
             } else {
                 App.showLog("=====realm===null==");
@@ -163,6 +178,17 @@ public class LocalWallpaperActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                //NavUtils.navigateUpFromSameTask(this);
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void insertValues() {

@@ -66,7 +66,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
                     startActivity(intent);
 
+/*
+                    RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
+                    realmBackupRestore.backup();
+*/
 
+
+                    //realmBackupRestore.restore();
 
 
                 /*
@@ -85,23 +91,24 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             navigationView.setNavigationItemSelectedListener(this);
 
 
+            //RealmConfiguration realmConfiguration =
+
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
+                   // .encryptionKey(App.getEncryptRawKey())
+                    .build();
 
 
-
-
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().build();
             // Clear the realm from last time
             // Realm.deleteRealm(realmConfiguration);
             realm = Realm.getInstance(realmConfiguration);
+            //realm = Realm.getInstance(App.getRealmConfiguration());
 
-            RealmBackupRestore realmBackupRestore = new  RealmBackupRestore(DashboardActivity.this,realm);
+           /*
+           RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
             //realmBackupRestore.backup();
             realmBackupRestore.restore();
-
-            // Clear the realm from last time
-            // Realm.deleteRealm(realmConfiguration);
             realm = Realm.getInstance(realmConfiguration);
-
+            */
 
 
 // for the insert # !@#!@#
@@ -115,14 +122,13 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             }
 
 
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     boolean isInserted = false;
+
     private void insertDashboard() {
         try {
             App.showLog("========insertDashboard=====");
@@ -160,21 +166,16 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 App.showLog("====arrayListJsonDashboardModel===" + arrayListJsonDashboardModel.size());
 
 
-
                 mLayoutManager = new GridLayoutManager(DashboardActivity.this, COLUMN_NUM);
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mAdapter = new GalleryAdapter(DashboardActivity.this, arrayListJsonDashboardModel);
                 mRecyclerView.setAdapter(mAdapter);
             }
 
-            if(arrayListJsonDashboardModel.size() > 0)
-            {
+            if (arrayListJsonDashboardModel.size() > 0) {
 
-            }
-            else
-            {
-                if(isInserted == false)
-                {
+            } else {
+                if (isInserted == false) {
                     insertDashboard();
                 }
             }
@@ -387,8 +388,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(realm !=null)
-        {
+        if (realm != null) {
             realm.close();
         }
     }
