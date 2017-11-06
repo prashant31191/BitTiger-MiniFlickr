@@ -33,6 +33,7 @@ import com.model.GsonResponseWallpaperList;
 import com.model.JsonImageModel;
 import com.squareup.picasso.Transformation;
 import com.utils.Blur;
+import com.utils.RealmBackupRestore;
 import com.utils.TouchImageView;
 
 import java.io.File;
@@ -167,8 +168,8 @@ public class LocalWallpaperActivity extends AppCompatActivity {
 
             if (realm != null) {
 
-                 insertValues();
-                //getWallpaperValues();
+                 //insertValues();
+                getWallpaperValues();
 
             } else {
                 App.showLog("=====realm===null==");
@@ -262,6 +263,19 @@ public class LocalWallpaperActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                     } else {
                         progressBar.setVisibility(View.GONE);
+                    }
+
+                    if(arrayListJsonImageModel==null || arrayListJsonImageModel.size() <= 1)
+                    {
+                        if (App.checkDbFileIsExist() == true && realm !=null) {
+                            RealmBackupRestore realmBackupRestore = new RealmBackupRestore(LocalWallpaperActivity.this, realm);
+                            realmBackupRestore.restore();
+
+                        }
+                        else
+                        {
+                            App.downloadPhoto2();
+                        }
                     }
                 }
             }, 1500);

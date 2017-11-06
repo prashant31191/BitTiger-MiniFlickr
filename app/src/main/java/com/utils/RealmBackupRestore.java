@@ -8,6 +8,8 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.azwallpaper.App;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,8 +23,8 @@ import io.realm.Realm;
 public class RealmBackupRestore {
 
     private File EXPORT_REALM_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-    private String EXPORT_REALM_FILE_NAME = "download.realm";
-    private String IMPORT_REALM_FILE_NAME = "default.realm"; // Eventually replace this if you're using a custom db name
+    public static String EXPORT_REALM_FILE_NAME = "download.realm";
+    public static String IMPORT_REALM_FILE_NAME = "default.realm"; // Eventually replace this if you're using a custom db name
 
     private final static String TAG = RealmBackupRestore.class.getName();
 
@@ -96,6 +98,11 @@ public class RealmBackupRestore {
                 outputStream.write(buf, 0, bytesRead);
             }
             outputStream.close();
+
+            if(App.deleteFile()==true)
+            {
+                App.showLog("===deleteFile--on downloaded--===");
+            }
             return file.getAbsolutePath();
         } catch (Exception e) {
             e.printStackTrace();

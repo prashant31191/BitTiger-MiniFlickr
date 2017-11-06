@@ -17,3 +17,12 @@ http://www.droidviews.com/root-moto-e-2015-condor-and-install-twrp-recovery/
 
 
 
+https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/dashboard.json
+
+
+// -- for the database
+https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/download.realm
+
+
+/data/data/com.azwallpaper/files/default.realm
+

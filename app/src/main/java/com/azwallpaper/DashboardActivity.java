@@ -35,7 +35,6 @@ import java.util.Collection;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 public class DashboardActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +47,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
     Realm realm;
 
+    FloatingActionButton fab;
+    FloatingActionButton fabCreateBackup;
+    FloatingActionButton fabRestoreBackup;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,26 +63,34 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
             mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
             mRecyclerView.setHasFixedSize(true);
 
+            fab = (FloatingActionButton) findViewById(R.id.fab);
+            fabCreateBackup = (FloatingActionButton) findViewById(R.id.fabCreateBackup);
+            fabCreateBackup.setVisibility(View.GONE);
 
-            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            FloatingActionButton fabCreateBackup = (FloatingActionButton) findViewById(R.id.fabCreateBackup);
-            FloatingActionButton fabRestoreBackup = (FloatingActionButton) findViewById(R.id.fabRestoreBackup);
+            fabRestoreBackup = (FloatingActionButton) findViewById(R.id.fabRestoreBackup);
 
             fabRestoreBackup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
 
-                Snackbar.make(view, "Are you sure restore backup ?", Snackbar.LENGTH_LONG)
-                        .setAction("Yes", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                    Snackbar.make(view, "Are you sure restore backup ?", Snackbar.LENGTH_LONG)
+                            .setAction("Yes", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                                RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
-                                realmBackupRestore.restore();
+                                    if (App.checkDbFileIsExist() == true) {
+                                        RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
+                                        realmBackupRestore.restore();
 
-                            }
-                        }).show();
+                                    }
+                                    else
+                                    {
+                                        App.downloadPhoto2();
+                                    }
+
+                                }
+                            }).show();
                 }
             });
 
@@ -426,11 +438,24 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         };
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (realm != null) {
             realm.close();
         }
+    }
+
+    @Override
+    protected void onResume() {
+
+        if (App.checkDbFileIsExist() == true) {
+            if (realm != null && fabRestoreBackup != null) {
+                fabRestoreBackup.performClick();
+            }
+        }
+
+        super.onResume();
     }
 }

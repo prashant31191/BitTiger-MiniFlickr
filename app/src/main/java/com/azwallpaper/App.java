@@ -2,6 +2,7 @@ package com.azwallpaper;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 
@@ -35,15 +37,22 @@ import com.utils.SharePrefrences;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +69,8 @@ import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 /**
  * Created by prashant.patel on 7/20/2017.
@@ -712,8 +723,90 @@ public class App extends Application {
             realmConfiguration = new RealmConfiguration.Builder()
                     .encryptionKey(App.getEncryptRawKey())
                     .build();
+
+
+
             return realmConfiguration;
         }
+    }
+
+    //file dowload from url and set database
+    public static void downloadPhoto2() {
+        try {
+            App.showLog("=======downloadPhoto2=====");
+             DownloadManager mDownloadManager;
+
+            mDownloadManager = (DownloadManager) mContext.getSystemService(mContext.DOWNLOAD_SERVICE);
+
+            String folderName = "files";
+
+            String url = "https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/download.realm";
+            URL urlObj = new URL(url);
+            String urlPath = urlObj.getPath();
+            String fileName = urlPath.substring(urlPath.lastIndexOf('/') + 1);
+// fileName is now "somefilename.xy"
+
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setTitle("Download...");
+            request.setDescription("Please wait...!");
+            //request.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS,File.separator + folderName + File.separator + fileName);
+            request.setDestinationInExternalPublicDir(DIRECTORY_DOWNLOADS, File.separator + "download.realm");
+            //request.setDestinationInExternalFilesDir(mContext, folderName, "default.realm");
+            //request.setDestinationInExternalFilesDir(mContext, "", "default.realm");
+            mDownloadManager.enqueue(request);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static boolean checkDbFileIsExist() {
+        try {
+App.showLog("=======checkDbFileIsExist=====");
+
+
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)  + File.separator + "download.realm");
+            if (file.exists()) {
+                //Do something
+                return true;
+            } else {
+                // Do something else.
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean deleteFile()
+    {
+        App.showLog("=======deleteFile=====");
+
+        try {
+
+            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + File.separator +  "download.realm");
+            if (file.exists()) {
+                //Do something
+                file.delete();
+
+                return true;
+            } else {
+                // Do something else.
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public static boolean renameFile(File from, File to) {
+        return from.getParentFile().exists() && from.exists() && from.renameTo(to);
     }
 
 
