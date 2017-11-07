@@ -67,7 +67,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
             fab = (FloatingActionButton) findViewById(R.id.fab);
             fabCreateBackup = (FloatingActionButton) findViewById(R.id.fabCreateBackup);
-            fabCreateBackup.setVisibility(View.VISIBLE);
+            fabCreateBackup.setVisibility(View.GONE);
 
             fabRestoreBackup = (FloatingActionButton) findViewById(R.id.fabRestoreBackup);
 
@@ -92,7 +92,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                     {
                         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
 
-                        builder.setTitle("New wallpaper available here size = 2.4 MB");
+                        builder.setTitle("New wallpaper available here approx size = 2.3 MB");
                         builder.setMessage("Are you sure restore backup?");
 
                         builder.setPositiveButton("DOWNLOAD", new DialogInterface.OnClickListener() {
