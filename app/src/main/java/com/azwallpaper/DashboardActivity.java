@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,12 +86,10 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                             public void run() {
                                 finish();
                             }
-                        },3000);
+                        }, 3000);
 
 
-                    }
-                    else
-                    {
+                    } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
 
                         builder.setTitle("New wallpaper available here approx size = 2.3 MB");
@@ -335,19 +335,40 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(DashboardActivity.this, GalleryActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_sync) {
+            if (fabRestoreBackup != null)
+                fabRestoreBackup.performClick();
+        } else if (id == R.id.nav_more_app) {
+            //
+            String url = "https://www.amazon.com/s/ref=bl_sr_mobile-apps/131-3886681-0807921?_encoding=UTF8&field-brandtextbin=wewer&node=2350149011";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
 
         } else if (id == R.id.nav_share) {
-
+            shareApp();
         } else if (id == R.id.nav_send) {
-
+            shareApp();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void shareApp()
+    {
+        try {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_SUBJECT, "Awesome applications");
+            String sAux = "\nLet me recommend you this application please download and review.\n\n";
+            sAux = sAux + "https://www.amazon.com/s/ref=bl_sr_mobile-apps/131-3886681-0807921?_encoding=UTF8&field-brandtextbin=wewer&node=2350149011 \n\n";
+            i.putExtra(Intent.EXTRA_TEXT, sAux);
+            startActivity(Intent.createChooser(i, "Share application"));
+        } catch(Exception e) {
+            //e.toString();
+        }
+
     }
 
     boolean doubleBackToExitPressedOnce = false;

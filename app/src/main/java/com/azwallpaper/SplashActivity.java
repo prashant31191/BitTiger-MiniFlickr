@@ -6,6 +6,9 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -24,6 +27,15 @@ public class SplashActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_splash);
             handler = new Handler();
+
+            ImageView ivSplash = (ImageView) findViewById(R.id.ivSplash);
+
+            String splash_url = "https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/bg_image.jpg";
+            Glide.with(SplashActivity.this)
+                    .load(splash_url)
+                    .placeholder(R.drawable.bg_image)
+                    .into(ivSplash);
+
 
 
             handler.postDelayed(new Runnable() {
