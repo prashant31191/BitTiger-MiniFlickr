@@ -82,9 +82,9 @@ public class App extends Application {
 
     // app folder name
     public static String APP_FOLDERNAME = "azwallpaper";
-    public static String ADS_ID_BANNER = "123123111111";
-    public static String ADS_ID_RVID = "123123123123";
-    public static final String APP_ID = "ca-app-pub-123123~123123";
+    public static String ADS_ID_BANNER = "ca-app-pub-4346653435295459/3341327605";
+    public static String ADS_ID_RVID = "ca-app-pub-4346653435295459/1206118856";
+    public static final String APP_ID = "ca-app-pub-4346653435295459~7028580736";
 
     //for the realm database encryption and decryption key
     public static String RealmEncryptionKey = "f263575e7b00a977a8e915feb9bfb2f992b2b8f11eaaaaaaa46523132131689465413132132165469487987987643545465464abbbbbccdddffff111222333";
