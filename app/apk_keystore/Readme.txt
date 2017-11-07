@@ -26,3 +26,13 @@ https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/a
 
 /data/data/com.azwallpaper/files/default.realm
 
+
+
+keystore_3wallpaper.jks
+
+keytore = keystore_3wallpaper
+alias = 3wallpaper
+password = 1---9
+
+
+
