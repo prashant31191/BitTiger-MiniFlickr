@@ -60,7 +60,10 @@ public class RealmBackupRestore {
             exportRealmFile.delete();
 
             // copy current realm to backup file
-            realm.writeCopyTo(exportRealmFile);
+            //realm.writeCopyTo(exportRealmFile); // for the simple database backup
+
+            realm.writeEncryptedCopyTo(exportRealmFile,App.getEncryptRawKey()); // for the encypted database backup
+
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -82,7 +82,6 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                     if (App.checkDbFileIsExist() == true) {
                                         RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
                                         realmBackupRestore.restore();
-
                                     }
                                     else
                                     {
