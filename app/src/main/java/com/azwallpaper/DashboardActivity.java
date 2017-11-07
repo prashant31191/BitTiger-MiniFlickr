@@ -65,7 +65,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
             fab = (FloatingActionButton) findViewById(R.id.fab);
             fabCreateBackup = (FloatingActionButton) findViewById(R.id.fabCreateBackup);
-            fabCreateBackup.setVisibility(View.GONE);
+            fabCreateBackup.setVisibility(View.VISIBLE);
 
             fabRestoreBackup = (FloatingActionButton) findViewById(R.id.fabRestoreBackup);
 

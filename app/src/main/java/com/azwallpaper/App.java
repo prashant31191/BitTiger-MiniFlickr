@@ -719,11 +719,17 @@ public class App extends Application {
         }
         else
         {
+/*
 
             realmConfiguration = new RealmConfiguration.Builder()
                     .encryptionKey(App.getEncryptRawKey())
                     .build();
+*/
 
+
+            realmConfiguration = new RealmConfiguration.Builder()
+                    .deleteRealmIfMigrationNeeded()
+                    .build();
 
 
             return realmConfiguration;
