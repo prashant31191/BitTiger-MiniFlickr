@@ -1,6 +1,8 @@
 package com.azwallpaper;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -73,7 +75,55 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 @Override
                 public void onClick(View view) {
 
+                    if (App.checkDbFileIsExist() == true) {
+                        RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
+                        realmBackupRestore.restore();
 
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                finish();
+                            }
+                        },3000);
+
+
+                    }
+                    else
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DashboardActivity.this);
+
+                        builder.setTitle("New wallpaper available here size = 2.4 MB");
+                        builder.setMessage("Are you sure restore backup?");
+
+                        builder.setPositiveButton("DOWNLOAD", new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Do nothing but close the dialog
+
+                                App.downloadPhoto2();
+
+                                dialog.dismiss();
+                            }
+                        });
+
+                        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                // Do nothing
+                                dialog.dismiss();
+                            }
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+
+
+
+
+/*
                     Snackbar.make(view, "Are you sure restore backup ?", Snackbar.LENGTH_LONG)
                             .setAction("Yes", new View.OnClickListener() {
                                 @Override
@@ -82,6 +132,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                                     if (App.checkDbFileIsExist() == true) {
                                         RealmBackupRestore realmBackupRestore = new RealmBackupRestore(DashboardActivity.this, realm);
                                         realmBackupRestore.restore();
+
+                                        Intent intent = new Intent(DashboardActivity.this, DashboardActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+
                                     }
                                     else
                                     {
@@ -90,6 +145,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
 
                                 }
                             }).show();
+
+                    */
                 }
             });
 

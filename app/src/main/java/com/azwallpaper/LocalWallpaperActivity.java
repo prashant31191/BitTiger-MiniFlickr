@@ -168,8 +168,8 @@ public class LocalWallpaperActivity extends AppCompatActivity {
 
             if (realm != null) {
 
-                  insertValues();
-                //getWallpaperValues();
+                  //insertValues();
+                getWallpaperValues();
 
             } else {
                 App.showLog("=====realm===null==");
