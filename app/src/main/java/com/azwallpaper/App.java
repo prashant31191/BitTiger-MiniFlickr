@@ -729,6 +729,7 @@ public class App extends Application {
 
             realmConfiguration = new RealmConfiguration.Builder()
                     .deleteRealmIfMigrationNeeded()
+                    .encryptionKey(App.getEncryptRawKey())
                     .build();
 
 
@@ -746,7 +747,9 @@ public class App extends Application {
 
             String folderName = "files";
 
-            String url = "https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/download.realm";
+            // String url = "https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/download.realm";
+            // no encrypt - String url = "https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/sm-download.realm";
+            String url = "https://raw.githubusercontent.com/prashant31191/BitTiger-MiniFlickr/master/app/apk_keystore/files/11download.realm";
             URL urlObj = new URL(url);
             String urlPath = urlObj.getPath();
             String fileName = urlPath.substring(urlPath.lastIndexOf('/') + 1);
