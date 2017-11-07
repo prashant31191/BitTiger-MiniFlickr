@@ -59,10 +59,12 @@
 
                 android:text="Set as Wallpaper"
                 android:textSize="15dp"
-                android:textColor="@color/txt_black"
+                android:textColor="@color/tv_black_clr"
 
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
+
+
                 />
 
         </RelativeLayout>

@@ -52,6 +52,11 @@ android {
     // Some other configuration here...
 
     splits {
+       /* density {
+            enable true
+            reset()
+            include "mdpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
+        }*/
         abi {
             enable true
             reset()
@@ -104,6 +109,9 @@ dependencies {
     }
     // for the token and notification
     compile 'com.google.firebase:firebase-messaging:11.0.1'
+
+    // for the google ads
+    compile 'com.google.android.gms:play-services-ads:11.0.1'
 
 
 }

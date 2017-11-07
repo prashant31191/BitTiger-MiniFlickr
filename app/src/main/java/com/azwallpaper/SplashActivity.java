@@ -2,6 +2,7 @@ package com.azwallpaper;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,19 +20,27 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         //this.getSupportActionBar().hide();
+        try {
 
-        setContentView(R.layout.activity_splash);
-        handler = new Handler();
+            setContentView(R.layout.activity_splash);
+            handler = new Handler();
 
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "----------startActivityIntent----------");
-                Intent intent = new Intent(SplashActivity.this,  DashboardActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, KEEP_TIME);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d(TAG, "----------startActivityIntent----------");
+                    Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }, KEEP_TIME);
+
+            Settings.System.putInt(getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, 1); //To Enable
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
