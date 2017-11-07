@@ -417,14 +417,14 @@ public class App extends Application {
     }
 
     public static Typeface getFont_Regular() {
-        tf_Regular = Typeface.createFromAsset(mContext.getAssets(), "font/roboto_light.ttf");
+        tf_Regular = Typeface.createFromAsset(mContext.getAssets(), "font/roboto_regular.ttf");
         return tf_Regular;
     }
 
 
     public static Typeface getFont_Bold() {
         //tf_Bold = Typeface.createFromAsset(mContext.getAssets(), "font/pacifico.ttf");
-        tf_Bold = Typeface.createFromAsset(mContext.getAssets(), "font/roboto_regular.ttf");
+        tf_Bold = Typeface.createFromAsset(mContext.getAssets(), "font/pacifico.ttf");
         return tf_Bold;
     }
 

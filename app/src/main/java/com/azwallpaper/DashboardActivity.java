@@ -401,6 +401,8 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 mImageView = (PEWImageView) itemView.findViewById(R.id.gallery_item);
                 tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
 
+                tvTitle.setTypeface(App.getFont_Bold());
+
             }
         }
 

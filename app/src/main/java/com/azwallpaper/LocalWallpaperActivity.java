@@ -100,6 +100,7 @@ public class LocalWallpaperActivity extends AppCompatActivity {
         ivFullScreen = (TouchImageView) findViewById(R.id.ivFullScreen);
         ivClose = (ImageView) findViewById(R.id.ivClose);
         tvSetWallpaper = (TextView) findViewById(R.id.tvSetWallpaper);
+        tvSetWallpaper.setTypeface(App.getFont_Regular());
 
         tvSetWallpaper.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,6 +377,7 @@ public class LocalWallpaperActivity extends AppCompatActivity {
                 tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
                 cvCard = (CardView) itemView.findViewById(R.id.cvCard);
 
+                tvTitle.setTypeface(App.getFont_Regular());
             }
         }
 
