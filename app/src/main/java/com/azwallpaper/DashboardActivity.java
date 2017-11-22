@@ -19,6 +19,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.model.JsonDashboardModel;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -55,6 +61,11 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     FloatingActionButton fabCreateBackup;
     FloatingActionButton fabRestoreBackup;
 
+    private static final String TAG = DashboardActivity.class.getSimpleName();
+
+    //for the video ads
+    private RewardedVideoAd mRewardedVideoAd;
+    boolean isClickEnable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,7 +242,7 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
                 App.showLog("===no insert database dashboard==");
             }
 
-
+            setupAds();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -518,6 +529,84 @@ public class DashboardActivity extends AppCompatActivity implements NavigationVi
     }
 
 
+
+    private void setupAds()
+    {
+        try{
+            // Initialize the Mobile Ads SDK.
+            MobileAds.initialize(this, App.APP_ID);
+
+            mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+            mRewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+                @Override
+                public void onRewardedVideoAdLoaded() {
+                    Log.i(TAG, "====onRewardedVideoAdLoaded====");
+                    if (isClickEnable == false) {
+                        isClickEnable = true;
+                        showRewardedVideo();
+                    }
+
+                    loadRewardedVideoAd();
+
+
+                }
+
+                @Override
+                public void onRewardedVideoAdOpened() {
+                    Log.i(TAG, "====onRewardedVideoAdOpened====");
+                }
+
+                @Override
+                public void onRewardedVideoStarted() {
+                    Log.i(TAG, "====onRewardedVideoStarted====");
+                }
+
+                @Override
+                public void onRewardedVideoAdClosed() {
+                    Log.i(TAG, "====onRewardedVideoAdClosed====");
+                }
+
+                @Override
+                public void onRewarded(RewardItem rewardItem) {
+                    Log.i(TAG, "====onRewarded====");
+                }
+
+                @Override
+                public void onRewardedVideoAdLeftApplication() {
+                    Log.i(TAG, "====onRewardedVideoAdLeftApplication====");
+                }
+
+                @Override
+                public void onRewardedVideoAdFailedToLoad(int i) {
+                    Log.i(TAG, "====onRewardedVideoAdFailedToLoad====");
+
+                }
+            });
+
+            loadRewardedVideoAd();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    private void loadRewardedVideoAd() {
+        if (mRewardedVideoAd !=null && !mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd.loadAd(App.ADS_ID_RVID, new AdRequest.Builder().build());
+        }
+    }
+
+    private void showRewardedVideo() {
+        Log.i(TAG, "====showRewardedVideo====");
+
+        if (mRewardedVideoAd !=null && mRewardedVideoAd.isLoaded()) {
+            mRewardedVideoAd.show();
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

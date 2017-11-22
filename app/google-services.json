@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "asdasd",
-    "firebase_url": "https://asdasd-1177.firebaseio.com",
-    "project_id": "asdasd-1177",
-    "storage_bucket": "asdasd-1177.appspot.com"
+    "project_number": "53084434855",
+    "firebase_url": "https://allapps-d2024.firebaseio.com",
+    "project_id": "allapps-d2024",
+    "storage_bucket": "allapps-d2024.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:728611133646:android:111222123123",
+        "mobilesdk_app_id": "1:53084434855:android:80bd08f067deb9ab",
         "android_client_info": {
           "package_name": "com.azwallpaper"
         }
       },
       "oauth_client": [
         {
-          "client_id": "728611133646-11112222qweqwe123123.apps.googleusercontent.com",
+          "client_id": "53084434855-poo5m19bbjlahss41do8v0fs2324lrp5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "123-asd--123"
+          "current_key": "AIzaSyCboPjchx1HakhIriwnvS1jZj66ZnYB68w"
         }
       ],
       "services": {

@@ -29,6 +29,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.fmsirvent.ParallaxEverywhere.PEWImageView;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.model.GsonResponseWallpaperList;
 import com.model.JsonImageModel;
 import com.squareup.picasso.Transformation;
@@ -88,68 +92,69 @@ public class LocalWallpaperActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "----------onCreate----------");
+        try {
+            Log.d(TAG, "----------onCreate----------");
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_dashboard);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.content_dashboard);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        rlImage = (RelativeLayout) findViewById(R.id.rlImage);
-        ivFullScreen = (TouchImageView) findViewById(R.id.ivFullScreen);
-        ivClose = (ImageView) findViewById(R.id.ivClose);
-        tvSetWallpaper = (TextView) findViewById(R.id.tvSetWallpaper);
-        tvSetWallpaper.setTypeface(App.getFont_Regular());
+            rlImage = (RelativeLayout) findViewById(R.id.rlImage);
+            ivFullScreen = (TouchImageView) findViewById(R.id.ivFullScreen);
+            ivClose = (ImageView) findViewById(R.id.ivClose);
+            tvSetWallpaper = (TextView) findViewById(R.id.tvSetWallpaper);
+            tvSetWallpaper.setTypeface(App.getFont_Regular());
 
-        tvSetWallpaper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bitmap != null) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setWallpaper();
-                        }
-                    }, 500);
+            tvSetWallpaper.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (bitmap != null) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setWallpaper();
+                            }
+                        }, 500);
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please wait Image is Loading...!", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please wait Image is Loading...!", Toast.LENGTH_LONG).show();
+                    }
                 }
+            });
+
+            ivClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    progressBar.setVisibility(View.GONE);
+                    rlImage.setVisibility(View.GONE);
+
+
+                }
+            });
+
+
+            mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+            progressBar = (ProgressBar) findViewById(R.id.progressBar);
+            progressBar.setVisibility(View.VISIBLE);
+            mRecyclerView.setHasFixedSize(true);
+
+            if (getIntent() != null && getIntent().getExtras() != null) {
+                if (getIntent().getExtras().getString("id") != null) {
+                    id = getIntent().getExtras().getString("id");
+                }
+
+                if (getIntent().getExtras().getString("title") != null) {
+                    strTitle = getIntent().getExtras().getString("title");
+                    actionBarSetup();
+                }
+
             }
-        });
 
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.GONE);
-                rlImage.setVisibility(View.GONE);
-
-
-            }
-        });
-
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-        mRecyclerView.setHasFixedSize(true);
-
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getString("id") != null) {
-                id = getIntent().getExtras().getString("id");
-            }
-
-            if (getIntent().getExtras().getString("title") != null) {
-                strTitle = getIntent().getExtras().getString("title");
-                actionBarSetup();
-            }
-
-        }
-
-        if (id != null) {
+            if (id != null) {
 
 
 
@@ -163,23 +168,93 @@ public class LocalWallpaperActivity extends AppCompatActivity {
                     .encryptionKey(App.getEncryptRawKey())
                     .build();
 */
-            //realm = Realm.getInstance(realmConfiguration);
-           realm = Realm.getInstance(App.getRealmConfiguration());
+                //realm = Realm.getInstance(realmConfiguration);
+                realm = Realm.getInstance(App.getRealmConfiguration());
 
 
-            if (realm != null) {
+                if (realm != null) {
 
-                  //insertValues();
-                getWallpaperValues();
+                    //insertValues();
+                    getWallpaperValues();
 
+                } else {
+                    App.showLog("=====realm===null==");
+                }
             } else {
-                App.showLog("=====realm===null==");
+                progressBar.setVisibility(View.GONE);
             }
-        } else {
-            progressBar.setVisibility(View.GONE);
-        }
 
+            setDisplayBanner();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
+    AdView mAdView;
+    RelativeLayout rlAds;
+    private void setDisplayBanner()
+    {
+
+
+        //String deviceid = tm.getDeviceId();
+
+        rlAds = (RelativeLayout) findViewById(R.id.rlAds);
+        rlAds.setVisibility(View.VISIBLE);
+        mAdView = new AdView(LocalWallpaperActivity.this);
+        mAdView.setAdSize(AdSize.BANNER);
+        mAdView.setAdUnitId(App.ADS_ID_BANNER2);
+
+        // Add the AdView to the view hierarchy. The view will have no size
+        // until the ad is loaded.
+        rlAds.addView(mAdView);
+
+        // Create an ad request. Check logcat output for the hashed device ID to
+        // get test ads on a physical device.
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("35588250B43518CCDA7DE425504EE232")
+                .build();
+        //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+        //.addTestDevice(deviceid).build();
+
+        // Start loading the ad in the background.
+        mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.i("Ads", "onAdLoaded");
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                Log.i("Ads", "onAdFailedToLoad");
+                rlAds.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.i("Ads", "onAdOpened");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.i("Ads", "onAdLeftApplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when when the user is about to return
+                // to the app after tapping on an ad.
+                Log.i("Ads", "onAdClosed");
+            }
+        });
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

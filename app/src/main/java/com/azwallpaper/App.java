@@ -83,6 +83,7 @@ public class App extends Application {
     // app folder name
     public static String APP_FOLDERNAME = "azwallpaper";
     public static String ADS_ID_BANNER = "ca-app-pub-4346653435295459/3341327605";
+    public static String ADS_ID_BANNER2 = "ca-app-pub-4346653435295459/7033160603";
     public static String ADS_ID_RVID = "ca-app-pub-4346653435295459/1206118856";
     public static final String APP_ID = "ca-app-pub-4346653435295459~7028580736";
 
